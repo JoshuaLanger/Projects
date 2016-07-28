@@ -1,0 +1,108 @@
+#Name: Joshua Langer
+#Course: CSCI 1521 MW
+#Date: April 4, 2012
+
+from random import random
+
+
+def main():
+    Intro()
+    n = NumGames()
+    w = LoopGames(n)
+    p = Prob(w,n)
+    Sum(w,p)
+
+#This is the top layer, showing the basic outline of the program and how it will
+#be run
+
+def Intro():
+    print('This program simulates a number of games of craps, then produces your number of wins and probability of winning')
+    print()
+    
+#The opening statement; the output will be number of wins and its probability
+
+def NumGames():
+    n = eval(input("Enter how many games you wish to simulate: "))
+    return n
+
+def LoopGames(n):
+    w = 0   #initialize w (number of wins) to zero
+    for i in range(n):
+        dR = diceRoll()
+        if dR == 2 or dR == 3 or dR == 12: #Not the most elegent solution, I know
+            w = w
+        elif dR == 7 or dR == 11:
+            w = w + 1
+        else:
+            rollPoint(dR,w)
+    return w
+
+#Represents "calling out" round. A player rolls two dice, represented by
+#diceRoll(). At this point, certain numbers allow the player to instantly
+#win or lose (not win) the current game, as represented by increments of w.
+
+#If player doesn't instantly win or lose (else statement), he or she "rolls
+#for point", as will be explained in rollPoint(dR).
+
+def diceRoll():
+	r = random()
+	if r <= (1/36):
+		dR = 2
+	elif r > (1/36) and r <= (3/36):
+		dR = 3
+	elif r > (3/36) and r <= (6/36):
+		dR = 4
+	elif r > (6/36) and r <= (10/36):
+		dR = 5
+	elif r > (10/36) and r <= (15/36):
+		dR = 6
+	elif r > (15/36) and r <= (21/36):
+		dR = 7
+	elif r > (21/36) and r <= (26/36):
+		dR = 8
+	elif r > (26/36) and r <= (30/36):
+		dR = 9
+	elif r > (30/36) and r <= (33/36):
+		dR = 10
+	elif r > (33/36) and r <= (35/36):
+		dR = 11
+	else:
+		dR = 12
+	return dR
+
+#diceRoll() uses the cumulative distribution probabilities of rolling dice
+#to favor some numbers over others (one would eventually roll more 7's
+#than 10's, for instance). Remember to import random before using this function.
+
+def rollPoint(dR,w):
+    ndR = diceRoll()
+    while w < 1:
+        if ndR == dR:
+            w = w + 1
+        elif ndR == 7:
+            w = w
+            break
+        else:
+            ndR = diceRoll()
+    return w        
+
+#In this round, if a player rolls the name number as before (ndR = dR), he or
+#she wins. If a player rolls a seven however, he or she loses. If neither
+#happens, he or she must roll again. This is all represented in an indefinite
+#"while" loop and three possibilites.    
+
+def Prob(w,n):
+    return w/n
+
+#A simple function calculating number of wins against number of games
+
+def Sum (w,p):
+    print("You have won {0} times. You have a {1:0.1%} chance of winning".format(w,p))
+
+#The probability is formatted within the print statement to appear as a percent    
+
+if __name__ == '__main__':
+    main()
+
+
+        
